@@ -142,12 +142,48 @@
 
         `for server in $(host -t ns megacorpone.com | cut -d " " -f4); do host -l megacorpone.com $server; done`
 
-    - An automation script is present in the tools.
+    - 	An automation script is present in the tools.
 
-    - DNSRecon zone transfer
+    -	DNSRecon zone transfer
 
         `dnsrecon -d megacorpone.com -t axfr`
 
 -   Port Scanning
 
+	-	Nmap Scan ICMP 
 
+		`nmap -v -sn 10.10.10.123 -oG ping-sweep.txt`
+
+		`grep Up ping-sweep.txt | cut -d " " -f2`
+
+	-	Nmap scan for top 20 ports
+
+		`nmap -sT -A --top-ports=20 10.11.1.1-254 -oG top-port-sweep.txt`
+
+	-	Nmap Usual scan
+
+		`nmap -p- -sC -sV -oA nmap/initial 10.11.1.251`
+
+	-	Nmap OS discovery
+
+		`nmap -O 10.11.1.251`
+
+	-	Nmap Banner Grabbing and Service Enumeration
+
+		`nmap -sV -sT 10.11.1.251`
+
+		`nmap -A 10.11.1.251`
+
+	-	Nmap NSE Scripts
+
+		`/usr/share/nmap/scripts`
+
+		`nmap --script smb-vuln* 10.11.1.251`
+
+	-  	For mass scanning with the list of IP's in a list we can use the below parameter -iL to mention the list and perform scanning.
+
+		`nmap -iL ips.txt -p 80 -sV -oG web-server-version.txt`
+
+    -   For mass scanning with the nmap using NSE script
+
+        `nmap -iL ../lab-excercies/ips.txt --script smb-os-discovery.nse`
