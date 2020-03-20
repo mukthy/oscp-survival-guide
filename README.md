@@ -187,3 +187,53 @@
     -   For mass scanning with the nmap using NSE script
 
         `nmap -iL ../lab-excercies/ips.txt --script smb-os-discovery.nse`
+
+    -   For scanning for open ports in a lab range
+
+        `nmap -p 139,445 10.11.1.1-24`
+
+        It can also used to find which machine is acting as a DNS server in the lab range
+
+        `nmap -p 53 10.11.1.1-254`
+
+-   SMB Enumeration (Server Message Block)
+
+    `nmap -iL ../lab-excercies/ips.txt --script smb-os-discovery.nse`
+
+    `nmap -p 139,445 --script smb-vuln* -oA vuln 10.11.1.5`
+
+    `nmap -p 139,445 --script smb-enum-users.nse 10.11.1.202`
+
+    `nmap -p 139,445 --script smb-vuln* 10.11.1.5`
+
+    `nmap -p 139,445 -oG ../lab-excercies/smbports.txt 10.11.1.1-254`
+
+    `cat ../lab-excercies/smbports.txt | grep open | cut -d " " -f2`
+
+    `nmap -p 139,445 --script smb-vuln* -iL ../lab-excercies/smbips.txt`
+
+    -   SMB (nbtscan tool) - it scans the range of machines for the SMB service and provide us the information about it.
+
+        `nbtscan 10.11.1.1-254`
+
+    -   RPCLIENT (Null Sessions)
+
+        `rpcclient -U "" 10.11.1.5`
+
+        -   RPC Commands
+
+            `srvinfo`
+
+            `enumdomusers`
+
+            `getdompwinfo`
+
+-   SMTP Enumeration (VRFY Script)
+
+    `for user in $(cat user.txt); do echo VRFY $user | nc -nv -w 1 10.11.25.86 25 2>/dev/null | grep ^"250"; done`
+
+    -   SMTP Enumeration using nmap NSE script
+
+        `nmap --script smtp-enum-users.nse --script-args=smtp-enum-users.methods=VRFY -p25 10.11.1.1-254 --open`
+
+
